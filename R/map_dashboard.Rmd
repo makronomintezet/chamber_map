@@ -1,0 +1,49 @@
+---
+title: "Kamarák és szervezetek térképes elhelyezése"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+```
+
+# Magyar
+
+### Chart A
+
+```{r}
+map(c("Magyar", "Nemzetközi", "Vegyes Kamarák"),
+     function(sheet) {
+      df <- readxl::read_excel("c:/rprojects/chamber_map/data/Kereskedelmi szervezetek, kamarák adatbázis.xlsx", sheet = sheet)
+      df$type <- rep(sheet, nrow(df))
+      c("type", "Név", "Központi / Regionális iroda címe", "Cím (Központi Iroda)", "Cím") %>% 
+       keep(~ . %in% names(df)) %>% 
+        {select(df, .)} %>% 
+        set_names("type", "name", "place")
+    }
+) %>% 
+  reduce(rbind)
+
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+# Nemzetközi
+
+### Chart B
+
+```{r}
+
+```
+
+### Chart C
+
+```{r}
+
+```
+
